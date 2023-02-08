@@ -4,29 +4,24 @@ import time
 from PIL import ImageTk, Image
 
 
-# Define o labirinto como uma matriz
 labirinto = [    
     ['1','1','1','1','1','1','1','1','1','1'],
+    ['1','0','1','0','0','0','0','0','0','1'],
+    ['1','0','1','1','0','1','1','1','0','1'],
     ['1','0','0','0','0','0','0','0','0','1'],
-    ['1','0','1','1','1','1','1','1','0','1'],
-    ['1','0','0','0','0','0','0','0','0','1'],
-    ['1','0','1','0','1','1','1','1','0','1'],
+    ['1','0','1','1','1','1','0','1','0','1'],
     ['1','0','0','0','0','1','0','0','0','1'],
-    ['1','1','1','1','1','1','C','1','1','1']
+    ['1','1','1','1','1','1','0','1','1','1'],
 ]
 
-# Define a posição inicial e a posição final
+
 saida = (0,1)
 chegada = (6,6)
 
-# Define a direção para cada movimento
 direcao_linha = [1, -1, 0, 0]
 direcao_coluna = [0, 0, 1, -1]
 
-# Define a pilha para armazenar o caminho
 pilha = [saida]
-
-# Define a matriz para marcar os lugares visitados
 
 casa_visitada = [[False for j in range(len(labirinto[0]))] for i in range(len(labirinto))]
 casa_visitada[saida[0]][saida[1]] = True
@@ -35,17 +30,13 @@ casa_visitada[saida[0]][saida[1]] = True
 caminho = []
 
 while pilha:
-    # Pega a última posição na pilha
     atual = pilha.pop()
 
-    # Adiciona a posição atual ao caminho
     caminho.append(atual)
 
-    # Se a posição atual é o final, interrompe o loop
     if atual == chegada:
         break
 
-    # Verifica os próximos movimentos possíveis
     for i in range(4):
         nova_linha = atual[0] + direcao_linha[i]
         nova_coluna = atual[1] + direcao_coluna[i]
@@ -53,14 +44,12 @@ while pilha:
             pilha.append((nova_linha, nova_coluna))
             casa_visitada[nova_linha][nova_coluna] = True 
 
-    # Atualiza o labirinto com o caminho percorrido até o momento
-    '''for i in range(len(caminho)):
+    for i in range(len(caminho)):
         x, y = caminho[i]
-        labirinto[x][y] = '0' '''
+        labirinto[x][y] = '.'
 
-    # Imprime o labirinto atualizado com o caminho
-    '''for linha in labirinto:
-        print(linha)'''
+    for linha in labirinto:
+        print(linha)
         
 
 # Verifica se o caminho foi encontrado ou não
@@ -115,38 +104,38 @@ class App(object):
         queijo = self.canvas.create_image(245, 250, image=imageQueijo, anchor=NW)
 
         posicaoinit = movimento[0]
-        posicaoinicial1 = posicaoinit[1]
-        posicaoinicial2 = posicaoinit[0]
+        inicial1 = posicaoinit[1]
+        inicial2 = posicaoinit[0]
         size = len(movimento)
         
         for index in range(1, size):
             posicao = movimento[index]
-            posicaoX = posicao[1]
-            posicaoY = posicao[0]
+            posX = posicao[1]
+            posY = posicao[0]
 
-            if posicaoY > posicaoinicial2 and posicaoX == posicaoinicial1:
+            if posY > inicial2 and posX == inicial1:
                 x = 0
                 y = 40
-                posicaoinicial1 = posicaoX
-                posicaoinicial2 = posicaoY
+                inicial1 = posX
+                inicial2 = posY
 
-            if posicaoY < posicaoinicial2 and posicaoX == posicaoinicial1:
+            elif posY < inicial2 and posX == inicial1:
                 x = 0
                 y = -40
-                posicaoinicial1 = posicaoX
-                posicaoInicial2 = posicaoY
+                inicial1 = posX
+                inicial2 = posY
                 
-            if posicaoY == posicaoinicial2 and posicaoX > posicaoinicial1:
+            elif posY == inicial2 and posX > inicial1:
                 x = 40
                 y = 0
-                posicaoinicial1 = posicaoX
-                posicaoInicial2 = posicaoY
+                inicial1 = posX
+                inicial2 = posY
 
-            if posicaoY == posicaoinicial2 and posicaoX < posicaoinicial1:
+            elif posY == inicial2 and posX < inicial1:
                 x = -40
                 y = 0
-                posicaoinicial1 = posicaoX
-                posicaoinicial2 = posicaoY
+                inicial1 = posX
+                inicial2 = posY
                 
             self.canvas.move(rato.image, x, y)
             root.update()
